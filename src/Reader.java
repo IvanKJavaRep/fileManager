@@ -1,10 +1,15 @@
 import java.io.*;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Reader {
+    public String getRootFolder() {
+        return rootFolder;
+    }
+
     private String rootFolder;
 
 
@@ -17,7 +22,7 @@ public class Reader {
             reader.close();
             File file = new File(folder);
             if (!file.isDirectory()) {
-                System.out.println("Incorrect folder!");
+                System.out.println("Incorrect folder name!");
                 return false;
             } else {
                 rootFolder = folder;
@@ -28,7 +33,7 @@ public class Reader {
         }
     }
 
-    public List<ExFile> generateExFiles() {
+    public List<ExFile> generateExFiles() throws Exception {
         var files = makeFiles();
         return createExFiles(files);
     }
@@ -52,19 +57,17 @@ public class Reader {
         return files;
     }
 
-    private List<ExFile> createExFiles(List<File> files) {
+    private List<ExFile> createExFiles(List<File> files) throws Exception {
         List<ExFile> exFiles = new ArrayList<>();
         for (var file :
                 files) {
-            System.out.println(file);
             exFiles.add(new ExFile(file, readFile(file, rootFolder)));
         }
         return exFiles;
     }
 
-    private List<File> readFile(File file, String folder) {
+    private List<File> readFile(File file, String folder) throws Exception {
         List<File> requirements = new ArrayList<>();
-        try {
             FileReader fr = new FileReader(file);
             BufferedReader reader = new BufferedReader(fr);
             String line = reader.readLine();
@@ -73,15 +76,14 @@ public class Reader {
                     String[] tokens = line.split("‘");
                     String pathToFile = folder + tokens[1].split("’")[0];
                     Path path = Paths.get(pathToFile);
-                    requirements.add(path.toFile());
+                    if (path.toFile().isFile()) {
+                        requirements.add(path.toFile());
+                    }else {
+                        throw new NoSuchFileException("No such file"+ path);
+                    }
                 }
                 line = reader.readLine();
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return requirements;
 
     }
