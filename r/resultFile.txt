@@ -1,4 +1,0 @@
-require ‘/new.txt’
-require ‘/text.txt’
-aaaaaaa
-

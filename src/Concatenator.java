@@ -2,8 +2,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class Concatenator {
@@ -13,6 +11,7 @@ public class Concatenator {
             FileWriter fileWriter = new FileWriter(result);
             for (var file :
                     files) {
+                System.out.println(file);
                 FileReader fr = new FileReader(file);
                 BufferedReader reader = new BufferedReader(fr);
                 String line = reader.readLine();

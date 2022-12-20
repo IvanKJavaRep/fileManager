@@ -14,7 +14,7 @@ public class Reader {
 
 
     public boolean readFolder() {
-        System.out.println("Enter root folder path:");
+        System.out.println("Enter absolute root folder path:");
         String folder = "";
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
@@ -41,7 +41,7 @@ public class Reader {
     private List<File> makeFiles() {
         List<File> files = new ArrayList<>();
         Path root = Paths.get(rootFolder);
-        List<Path> paths = null;
+        List<Path> paths;
         try {
             paths = java.nio.file.Files.walk(root).toList();
             for (var path :
